@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="new server">
+
+
+    <library id="MySQLLib">
+
+        <fileset id="MySQLFileset" dir="/config/libraries" includes="mysql-connector-java-5.1.39-bin.jar"></fileset>
+    </library>
+    <!-- Enable features -->
+
+    <featureManager>
+        <feature>webProfile-7.0</feature>
+    	  <feature>jdbc-4.1</feature>
+	</featureManager>
+
+    <!-- To allow access to this server from a remote client host="*" has been added to the following element -->
+    <httpEndpoint id="defaultHttpEndpoint"
+              host="*"
+              httpPort="9080"
+              httpsPort="9443" />
+
+    <!-- Automatically expand WAR files and EAR files -->
+    <applicationManager autoExpand="true"/>
+
+
+    <webApplication id="DatabaseDemo" location="DatabaseDemo.war"	name="DatabaseDemo">
+    	<classloader privateLibraryRef="MySQLLib">
+
+        </classloader>
+    </webApplication>
+    <jdbcDriver id="mysqlInstance" libraryRef="MySQLLib"></jdbcDriver>
+</server>

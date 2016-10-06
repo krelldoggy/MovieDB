@@ -1,0 +1,54 @@
+# This Vagrantfile was generated from the "Top 250 Movies v1.1"
+# template: https://cloud.skytap.com/templates/869749
+
+Vagrant.configure(2) do |config|
+  # The "skytap/empty" box contains minimal metadata. The source VMs
+  # are specified below using the vm_url setting.
+  config.vm.box = "skytap/empty"
+  config.ssh.username = "docker"
+  config.ssh.password = "ChangeMe!"
+
+  # Credentials for the Skytap REST API. If you plan to check this
+  # Vagrantfile into source control, consider omitting this block,
+  # and setting the environment variables VAGRANT_SKYTAP_USERNAME
+  # and VAGRANT_SKYTAP_API_TOKEN instead.
+  config.vm.provider :skytap do |skytap|
+    skytap.username  = "{YOUR USERNAME}"
+    skytap.api_token = "{YOUR API KEY}"
+  end
+
+  config.vm.define "AppServer01" do |appserver01|
+    appserver01.vm.provider :skytap do |skytap|
+      # Source VM: "App-Server-01"
+      skytap.vm_url = "https://cloud.skytap.com/vms/11529008"
+      skytap.vpn_url = "https://test.skytap.com/vpns/vpn-3890518"
+    end
+    appserver01.vm.synced_folder "/{PUT YOUR PATH HERE}/config-appsrvr/", "/liberty/config", type: :rsync
+  end
+
+  config.vm.define "AppServer02" do |appserver02|
+    appserver02.vm.provider :skytap do |skytap|
+      # Source VM: "AppServer-02"
+      skytap.vm_url = "https://cloud.skytap.com/vms/11529014"
+      skytap.vpn_url = "https://test.skytap.com/vpns/vpn-3890518"
+    end
+    appserver02.vm.synced_folder "/{PUT YOUR PATH HERE}/config-appsrvr/", "/liberty/config", type: :rsync
+  end
+
+  config.vm.define "LoadBalancer" do |loadbalancer|
+    loadbalancer.vm.provider :skytap do |skytap|
+      # Source VM: "LoadBalancer"
+      skytap.vm_url = "https://cloud.skytap.com/vms/11529010"
+      skytap.vpn_url = "https://test.skytap.com/vpns/vpn-3890518"
+    end
+  end
+
+  config.vm.define "DBServer" do |dbserver|
+    dbserver.vm.provider :skytap do |skytap|
+      # Source VM: "DB-Server"
+      skytap.vm_url = "https://cloud.skytap.com/vms/11529012"
+      skytap.vpn_url = "https://test.skytap.com/vpns/vpn-3890518"
+    end
+  end
+
+end
